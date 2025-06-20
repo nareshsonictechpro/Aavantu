@@ -1,0 +1,44 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.*.local
+
+# Logs
+logs
+*.log
+logs/**/*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Optional IDE settings
+.vscode/
+.idea/
+*.sw?
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Build artifacts
+dist/
+build/
+
+# Sequelize-specific (if using migrations)
+*.sqlite
+*.sqlite3
+
+# Ignore uploads if needed
+uploads/
+
+# Ignore local databases
+*.db
+
+# Ignore compiled TypeScript files (if applicable)
+*.tsbuildinfo
