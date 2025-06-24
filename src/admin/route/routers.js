@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { loginValidation } = require("../schema/adminValidation");
-const { login, uploadVideo, deleteRecord, getUser } = require("../controller/auth/admin.Controller"); 
+const { login, uploadVideo, deleteRecord, getUser, updateUserStatus, logout, forgotPassword, changePassword, resetPassword, verifyOtp, resendOtp } = require("../controller/auth/admin.Controller"); 
 const CategoryController = require("../controller/category/category.Controller");
 const CourseController = require("../controller/course/course.Controller");
 
@@ -20,7 +20,7 @@ const ThumbnailGenerator = require('video-thumbnail-generator').default;
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = 'uploads/banners/';
+    const uploadPath = 'uploads/';
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
@@ -30,29 +30,39 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage: storage })
+
+const upload = multer({ storage: storage });
+
 
 
 
 router.post("/login", loginValidation, login);
-router.get("/delete/:id", deleteRecord);
-router.get("/getUser", getUser);
+router.get('/logout', logout);
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-otp", verifyOtp);
+router.post("/resend-otp", resendOtp);
 
+router.post("/change-password", authenticateAdmin, changePassword);
+router.post("/reset-password", resetPassword);
+
+router.get("/delete/:id", deleteRecord);
+router.post("/getUser",authenticateAdmin, getUser);
+router.post('/updateUserStatus', authenticateAdmin, updateUserStatus);
 router.post('/generatethumbnail', uploadVideo)
 
 
 // Category 
 
-router.post('/category/create', authenticateAdmin, CategoryController.create);
-router.get('/category/list',authenticateAdmin, CategoryController.list);
-
+router.post("/category/create", upload.single("image"), CategoryController.create);
+router.put("/category/:id", upload.single("image"), CategoryController.update);
+router.get("/category/list", CategoryController.list);
 // Course 
 router.post('/course',authenticateAdmin, CourseController.create);
-router.get('/course', authenticateAdmin , CourseController.list);
-
+router.post("/course/list",authenticateAdmin, CourseController.list);
+router.put("/course/update/:id",authenticateAdmin, CourseController.update);
 // FAQ Routes
 router.post('/faq', FaqController.create);
-router.get('/faq', FaqController.list);
+router.post('/faq/list', FaqController.list);
 router.put('/faq/:id', FaqController.update);
 router.delete('/faq/:id', FaqController.delete);
 

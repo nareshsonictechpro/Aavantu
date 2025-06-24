@@ -24,7 +24,8 @@ module.exports = {
       otp,
     //   otp_expire_at: otpExpire,
     role: 0, // ✅ explicitly marking this user as "normal user"
-    is_verify: 0
+    is_verify: 0,
+    status:1
     });
 
     // await sendOtpEmail(email, otp);

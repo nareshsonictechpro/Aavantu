@@ -21,31 +21,34 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //app.use(express.static(path.join(__dirname, 'public')));
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = 'uploads/';
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath);
-        }
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-const upload = multer({ storage: storage });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         const uploadPath = 'uploads/';
+//         if (!fs.existsSync(uploadPath)) {
+//             fs.mkdirSync(uploadPath);
+//         }
+//         cb(null, uploadPath);
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + path.extname(file.originalname));
+//     }
+// });
+// const upload = multer({ storage: storage });
 
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use(cors({
+    origin: '*', // Or specify exact domain in production
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
+// 🔽 Then your other middlewares
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Routes
 app.use("/api/admin", adminRoute);
 app.use("/api", frontRoute);
-
-
-
-app.use(cors({
-    origin: '*', // Allow only this origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
-}));
 // Sample data
 const data = [
     { id: 1, name: 'John Doe', age: 30 },

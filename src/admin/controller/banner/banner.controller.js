@@ -3,19 +3,35 @@ const Banner = db.Banner;
 
 module.exports = {
   create: async (req, res) => {
-    try {
-      const { title } = req.body;
-      const image = req.file?.filename;
+   try {
+    const { title } = req.body;
+    const image = req.file?.filename;
 
-      if (!title || !image) {
-        return res.status(400).json({ message: 'Title and image are required' });
-      }
-
-      const banner = await Banner.create({ title, image });
-      res.status(201).json({ message: 'Banner created', banner });
-    } catch (error) {
-      res.status(500).json({ message: 'Error creating banner', error: error.message });
+    if (!title || !image) {
+      return res.status(400).json({ message: 'Title and image are required' });
     }
+
+    const banner = await Banner.create({ title, image });
+
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/banners/${image}`;
+
+    res.status(201).json({
+      status: true,
+      message: 'Banner created successfully',
+      data: {
+        id: banner.id,
+        title: banner.title,
+        image: banner.image,
+        imageUrl
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: 'Error creating banner',
+      error: error.message
+    });
+  }
   },
 
   list: async (req, res) => {
