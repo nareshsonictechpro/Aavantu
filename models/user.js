@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     status: DataTypes.INTEGER,
+    category_id: {
+  type: DataTypes.INTEGER,
+  allowNull: false
+},
   }, {
     sequelize,
     modelName: 'User',

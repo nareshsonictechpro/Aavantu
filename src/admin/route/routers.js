@@ -53,9 +53,9 @@ router.post('/generatethumbnail', uploadVideo)
 
 // Category 
 
-router.post("/category/create", upload.single("image"), CategoryController.create);
-router.put("/category/:id", upload.single("image"), CategoryController.update);
-router.get("/category/list", CategoryController.list);
+router.post("/category/create", upload.single("image"),authenticateAdmin, CategoryController.create);
+router.put("/category/:id", upload.single("image"),authenticateAdmin, CategoryController.update);
+router.get("/category/list",authenticateAdmin, CategoryController.list);
 // Course 
 router.post('/course',authenticateAdmin, CourseController.create);
 router.post("/course/list",authenticateAdmin, CourseController.list);

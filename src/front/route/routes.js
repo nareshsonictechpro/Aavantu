@@ -7,13 +7,17 @@ const {
   verifyOtp,
   forgotPassword,
   resetPassword,
-  login
+  login,
+  logout
 } = require("../controller/auth"); // ✅ make sure path is correct
+const { authenticateUser } = require("../../../middlewares/authJwts");
+const { list } = require("../controller/category/category.Controller");
 
 router.post('/signup', signupValidation, signup);
 router.post('/verify-otp', verifyOtpValidation, verifyOtp);
 router.post('/forgot-password', forgotPasswordValidation, forgotPassword);
 router.post('/reset-password', resetPasswordValidation, resetPassword);
 router.post('/login', loginValidation, login);
-
+router.get('/logout', authenticateUser, logout);
+router.get("/category/list", list);
 module.exports = router;
